@@ -1,0 +1,142 @@
+{
+  "success": true,
+  "imageUrl": "https://localhost:7132/uploads/ahad3-1024x944.jpg",
+  "timestamp": "2026-01-27 12:34:20",
+  "matchCount": 14,
+  "clusterCount": 1,
+  "clusters": [
+    {
+      "personId": "213DEFB5-1B8E-4450-7251-08DE3938A74F",
+      "similarity": 0.8436590433120728,
+      "faceCount": 14
+    }
+  ],
+  "matches": [
+    {
+      "faceId": "4219BFFB-04B2-4357-8C51-0F506F04FA66",
+      "mediaFileId": "27104DFF-FB97-4607-D05A-08DE393369CD",
+      "frameNumber": 0,
+      "fileName": "ahad3-1024x944.jpg",
+      "filePath": "\\\\192.168.1.151\\san\\UploadedMediaFilesMaster\\Event_fdba1704-ba88-43bd-8987-08de3932fbc6\\ahad3-1024x944.jpg",
+      "similarity": 0.9998,
+      "personId": "213DEFB5-1B8E-4450-7251-08DE3938A74F"
+    },
+    {
+      "faceId": "8C2A6A7C-6FFA-4ABD-867D-53AE2697177D",
+      "mediaFileId": "926FAE00-6A54-4054-D023-08DE393369CD",
+      "frameNumber": 0,
+      "fileName": "ahad3-1024x944.jpg",
+      "filePath": "\\\\192.168.1.151\\san\\UploadedMediaFilesMaster\\Event_fdba1704-ba88-43bd-8987-08de3932fbc6\\ahad3-1024x944.jpg",
+      "similarity": 0.9998,
+      "personId": "213DEFB5-1B8E-4450-7251-08DE3938A74F"
+    },
+    {
+      "faceId": "7744FB7D-0E1C-4C29-B993-B5F7107C48BE",
+      "mediaFileId": "38413AC1-D021-41CF-D031-08DE393369CD",
+      "frameNumber": 0,
+      "fileName": "3colm-161743722574-0.jpg",
+      "filePath": "\\\\192.168.1.151\\san\\UploadedMediaFilesMaster\\Event_fdba1704-ba88-43bd-8987-08de3932fbc6\\3colm-161743722574-0.jpg",
+      "similarity": 0.7367,
+      "personId": "213DEFB5-1B8E-4450-7251-08DE3938A74F"
+    },
+    {
+      "faceId": "5BF515DD-4FE4-4FDE-8602-6BC8C4FA5BB5",
+      "mediaFileId": "11501AD0-CBAD-4459-D00B-08DE393369CD",
+      "frameNumber": 0,
+      "fileName": "3colm-161743722574-0.jpg",
+      "filePath": "\\\\192.168.1.151\\san\\UploadedMediaFilesMaster\\Event_fdba1704-ba88-43bd-8987-08de3932fbc6\\3colm-161743722574-0.jpg",
+      "similarity": 0.7366,
+      "personId": "213DEFB5-1B8E-4450-7251-08DE3938A74F"
+    },
+    {
+      "faceId": "54A072BE-4098-425E-A9D5-52B31EC4E40B",
+      "mediaFileId": "89153A24-5DD7-4034-CFEB-08DE393369CD",
+      "frameNumber": 0,
+      "fileName": "images (4).jpg",
+      "filePath": "\\\\192.168.1.151\\san\\UploadedMediaFilesMaster\\Event_fdba1704-ba88-43bd-8987-08de3932fbc6\\images (4).jpg",
+      "similarity": 0.7204,
+      "personId": "213DEFB5-1B8E-4450-7251-08DE3938A74F"
+    },
+    {
+      "faceId": "66B758DD-1AEB-49FC-A1B8-E2A98825B57E",
+      "mediaFileId": "E951D4EE-3CBE-459E-D089-08DE393369CD",
+      "frameNumber": 0,
+      "fileName": "images (4).jpg",
+      "filePath": "\\\\192.168.1.151\\san\\UploadedMediaFilesMaster\\Event_fdba1704-ba88-43bd-8987-08de3932fbc6\\images (4).jpg",
+      "similarity": 0.7204,
+      "personId": "213DEFB5-1B8E-4450-7251-08DE3938A74F"
+    },
+    {
+      "faceId": "1AF33577-AA9D-4810-B937-13C9CA2BBFD1",
+      "mediaFileId": "2A9CF5E2-7CE9-48E4-D03E-08DE393369CD",
+      "frameNumber": 0,
+      "fileName": "155fbbe1c2ffcd8f53098d8ab46725d7.jpg",
+      "filePath": "\\\\192.168.1.151\\san\\UploadedMediaFilesMaster\\Event_fdba1704-ba88-43bd-8987-08de3932fbc6\\155fbbe1c2ffcd8f53098d8ab46725d7.jpg",
+      "similarity": 0.714,
+      "personId": "213DEFB5-1B8E-4450-7251-08DE3938A74F"
+    },
+    {
+      "faceId": "5F26DFEA-12E5-4B5D-96DE-E374C9D7A0A5",
+      "mediaFileId": "11218C61-CC23-4A7A-D016-08DE393369CD",
+      "frameNumber": 0,
+      "fileName": "155fbbe1c2ffcd8f53098d8ab46725d7.jpg",
+      "filePath": "\\\\192.168.1.151\\san\\UploadedMediaFilesMaster\\Event_fdba1704-ba88-43bd-8987-08de3932fbc6\\155fbbe1c2ffcd8f53098d8ab46725d7.jpg",
+      "similarity": 0.714,
+      "personId": "213DEFB5-1B8E-4450-7251-08DE3938A74F"
+    },
+    {
+      "faceId": "C7D1BA26-125A-468D-ADB0-3D196ACD38DD",
+      "mediaFileId": "A6AF1741-AF76-4493-D025-08DE393369CD",
+      "frameNumber": 0,
+      "fileName": "Ahad-Raza-Mir.jpeg",
+      "filePath": "\\\\192.168.1.151\\san\\UploadedMediaFilesMaster\\Event_fdba1704-ba88-43bd-8987-08de3932fbc6\\Ahad-Raza-Mir.jpeg",
+      "similarity": 0.7019,
+      "personId": "213DEFB5-1B8E-4450-7251-08DE3938A74F"
+    },
+    {
+      "faceId": "622539AB-F83A-4B31-9D5B-CB75D5E75C05",
+      "mediaFileId": "2275267C-A6A0-48F5-D05B-08DE393369CD",
+      "frameNumber": 0,
+      "fileName": "Ahad-Raza-Mir.jpeg",
+      "filePath": "\\\\192.168.1.151\\san\\UploadedMediaFilesMaster\\Event_fdba1704-ba88-43bd-8987-08de3932fbc6\\Ahad-Raza-Mir.jpeg",
+      "similarity": 0.7018,
+      "personId": "213DEFB5-1B8E-4450-7251-08DE3938A74F"
+    },
+    {
+      "faceId": "B142C0C9-6E2D-4DC8-B9FB-4CE4C2C7D3DB",
+      "mediaFileId": "A04E43D8-F510-4330-D059-08DE393369CD",
+      "frameNumber": 0,
+      "fileName": "ahad1-1-819x1024.jpg",
+      "filePath": "\\\\192.168.1.151\\san\\UploadedMediaFilesMaster\\Event_fdba1704-ba88-43bd-8987-08de3932fbc6\\ahad1-1-819x1024.jpg",
+      "similarity": 0.6989,
+      "personId": "213DEFB5-1B8E-4450-7251-08DE3938A74F"
+    },
+    {
+      "faceId": "AD89BEDF-2C40-4283-BEF1-6A4B59EDF3C1",
+      "mediaFileId": "A3A93AFE-54CA-4A2A-D021-08DE393369CD",
+      "frameNumber": 0,
+      "fileName": "ahad1-1-819x1024.jpg",
+      "filePath": "\\\\192.168.1.151\\san\\UploadedMediaFilesMaster\\Event_fdba1704-ba88-43bd-8987-08de3932fbc6\\ahad1-1-819x1024.jpg",
+      "similarity": 0.6989,
+      "personId": "213DEFB5-1B8E-4450-7251-08DE3938A74F"
+    },
+    {
+      "faceId": "B95EFA54-0F07-4C41-BCD7-586257AD864C",
+      "mediaFileId": "300F0AAE-C5DC-46AA-D02B-08DE393369CD",
+      "frameNumber": 0,
+      "fileName": "c1a883198df3a21f76f45ecc8807ccb9.jpg",
+      "filePath": "\\\\192.168.1.151\\san\\UploadedMediaFilesMaster\\Event_fdba1704-ba88-43bd-8987-08de3932fbc6\\c1a883198df3a21f76f45ecc8807ccb9.jpg",
+      "similarity": 0.6749,
+      "personId": "213DEFB5-1B8E-4450-7251-08DE3938A74F"
+    },
+    {
+      "faceId": "760D3859-D26A-4AC3-9408-943424671FCC",
+      "mediaFileId": "0DA97EE9-5F4E-4F83-D064-08DE393369CD",
+      "frameNumber": 0,
+      "fileName": "c1a883198df3a21f76f45ecc8807ccb9.jpg",
+      "filePath": "\\\\192.168.1.151\\san\\UploadedMediaFilesMaster\\Event_fdba1704-ba88-43bd-8987-08de3932fbc6\\c1a883198df3a21f76f45ecc8807ccb9.jpg",
+      "similarity": 0.6749,
+      "personId": "213DEFB5-1B8E-4450-7251-08DE3938A74F"
+    }
+  ]
+}

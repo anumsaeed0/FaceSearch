@@ -1,0 +1,217 @@
+﻿@{
+    ViewBag.Title = "Face Recognition Upload";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <!-- Upload Section -->
+        <div class="col-md-6">
+            <h2>Upload an Image</h2>
+
+            <form asp-action="Index" method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <input type="file" name="imageFile" class="form-control" accept="image/*" required />
+                </div>
+                <button type="submit" class="btn btn-primary">Upload & Process</button>
+            </form>
+
+            @if (ViewBag.Message != null)
+            {
+                <div class="alert alert-success mt-3">@ViewBag.Message</div>
+            }
+
+            @if (ViewBag.ImagePath != null)
+            {
+                <div style="position: relative; display: inline-block; margin-top: 15px;">
+                    <img src="@ViewBag.ImagePath" alt="Uploaded Image" class="img-thumbnail" style="max-width:100%;" />
+
+                    <!-- Delete Button -->
+                    <form asp-action="DeleteImage" method="post"
+                          style="position:absolute; top:5px; right:5px;">
+                        <input type="hidden" name="fileName" value="@ViewBag.FileName" />
+                        <button type="submit" class="btn btn-danger btn-sm">
+                            ×
+                        </button>
+                    </form>
+                </div>
+            }
+        </div>
+
+        <!-- Results Section -->
+        <div class="col-md-6">
+            <h2>Face Match Results</h2>
+            <button id="refreshResults" class="btn btn-info mb-3">Refresh Results</button>
+
+            <div id="loadingIndicator" class="alert alert-info" style="display:none;">
+                <span class="spinner-border spinner-border-sm me-2"></span>
+                Processing face detection...
+            </div>
+
+            <div id="resultsContainer">
+                <p class="text-muted">Upload an image to see matching results...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .match-card {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 10px;
+        background: #f9f9f9;
+    }
+
+    .similarity-badge {
+        font-weight: bold;
+        padding: 5px 10px;
+        border-radius: 3px;
+    }
+
+    .high-match {
+        background: #28a745;
+        color: white;
+    }
+
+    .medium-match {
+        background: #ffc107;
+        color: black;
+    }
+
+    .low-match {
+        background: #6c757d;
+        color: white;
+    }
+</style>
+
+<script>
+    let autoRefreshInterval;
+
+    function startAutoRefresh() {
+        let attempts = 0;
+        autoRefreshInterval = setInterval(() => {
+            attempts++;
+            fetchResults();
+            if (attempts >= 15) { // stop after 30 seconds
+                stopAutoRefresh();
+            }
+        }, 2000);
+    }
+
+    function stopAutoRefresh() {
+        if (autoRefreshInterval) {
+            clearInterval(autoRefreshInterval);
+            autoRefreshInterval = null;
+        }
+    }
+
+    async function fetchResults() {
+        try {
+            const response = await fetch('/api/face-match-results');
+            const data = await response.json();
+
+            if (data.success) {
+                displayResults(data);
+                document.getElementById('loadingIndicator').style.display = 'none';
+                stopAutoRefresh(); // stop polling once results are available
+            }
+        } catch (error) {
+            console.error('Error fetching results:', error);
+            document.getElementById('loadingIndicator').style.display = 'none';
+        }
+    }
+
+    function displayResults(data) {
+        const container = document.getElementById('resultsContainer');
+        let html = '';
+
+        // Display uploaded image
+        if (data.imageUrl) {
+            html += `<div class="mb-3 text-center">
+                        <img src="${data.imageUrl}" alt="Uploaded Image" class="img-thumbnail" style="max-width:100%;"/>
+                     </div>`;
+        }
+
+        // No matches found
+        if (!data.matches || data.matches.length === 0) {
+            html += `<div class="alert alert-warning">
+                        <strong>No matches found</strong>
+                        <p class="mb-0">${data.message || 'No matching faces detected in the database.'}</p>
+                     </div>`;
+        } else {
+            // Summary
+            html += `<div class="alert alert-success">
+                        <strong>Found ${data.matchCount} matching face(s)</strong> in ${data.clusterCount} person cluster(s)
+                     </div>`;
+
+            // Clusters
+            if (data.clusters && data.clusters.length > 0) {
+                html += '<h5>Top Matching Clusters:</h5>';
+                data.clusters.forEach(cluster => {
+                    const similarity = (cluster.similarity * 100).toFixed(1);
+                    html += `<div class="match-card">
+                                <span class="similarity-badge ${getSimilarityClass(cluster.similarity)}">
+                                    ${similarity}% match
+                                </span>
+                                <span class="ms-2">Person ID: ${cluster.personId}</span>
+                                <span class="ms-2 text-muted">(${cluster.faceCount} faces)</span>
+                             </div>`;
+                });
+            }
+
+            // Individual face matches
+            if (data.matches && data.matches.length > 0) {
+                html += '<h5 class="mt-3">Individual Face Matches:</h5>';
+                data.matches.forEach(match => {
+                    const similarity = (match.similarity * 100).toFixed(1);
+                    html += `<div class="match-card">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span class="similarity-badge ${getSimilarityClass(match.similarity)}">
+                                            ${similarity}% match
+                                        </span>
+                                    </div>
+                                    <div class="text-end">
+                                        <small class="d-block"><strong>File:</strong> ${match.fileName}</small>
+                                        <small class="d-block"><strong>Frame:</strong> ${match.frameNumber}</small>
+                                        <small class="d-block text-muted">Media ID: ${match.mediaFileId}</small>
+                                        <small class="d-block text-muted">Face ID: ${match.faceId}</small>
+                                    </div>
+                                </div>
+                             </div>`;
+                });
+            }
+        }
+
+        container.innerHTML = html;
+    }
+
+    function getSimilarityClass(similarity) {
+        if (similarity >= 0.75) return 'high-match';
+        if (similarity >= 0.60) return 'medium-match';
+        return 'low-match';
+    }
+
+    // Event listeners
+    document.getElementById('refreshResults').addEventListener('click', fetchResults);
+
+    // Start auto-refresh if there is an uploaded image
+    @if (ViewBag.ImagePath != null)
+    {
+            <text>
+                document.addEventListener('DOMContentLoaded', () => {
+                    document.getElementById('loadingIndicator').style.display = 'block';
+                    startAutoRefresh();
+                });
+            </text>
+    }
+
+    // Show loading indicator on form submit
+    document.querySelector('form').addEventListener('submit', () => {
+        setTimeout(() => {
+            document.getElementById('loadingIndicator').style.display = 'block';
+            startAutoRefresh();
+        }, 500);
+    });
+</script>
