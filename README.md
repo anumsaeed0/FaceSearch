@@ -2,6 +2,8 @@
 
 This project processes uploaded images, detects faces, generates embeddings, and matches them against stored face data using clustering and similarity search.
 
+![Face Search](WEB.jpeg)
+
 ---
 
 ## 🔧 Requirements
