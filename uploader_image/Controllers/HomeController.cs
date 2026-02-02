@@ -128,5 +128,35 @@ namespace uploader_image.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpGet("api/thumbnail")]
+        public IActionResult GetThumbnail([FromQuery] string path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+                return BadRequest("Path is required.");
+
+            // Only allow network share paths for security
+            // path to server for example \\123.123.1.123\data\faces
+            string allowedPrefix = @"";
+            if (!path.StartsWith(allowedPrefix))
+                return Unauthorized("Invalid path.");
+
+            if (!System.IO.File.Exists(path))
+                return NotFound("File does not exist.");
+
+            // Detect MIME type
+            string extension = Path.GetExtension(path).ToLower();
+            string contentType = extension switch
+            {
+                ".jpg" or ".jpeg" => "image/jpeg",
+                ".png" => "image/png",
+                ".bmp" => "image/bmp",
+                _ => "application/octet-stream"
+            };
+
+            var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+            return File(fileStream, contentType);
+        }
+
     }
 }
