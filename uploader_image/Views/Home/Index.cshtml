@@ -1,4 +1,4 @@
-﻿@{
+@{
     ViewBag.Title = "Face Recognition Upload";
 }
 
@@ -83,6 +83,15 @@
         background: #6c757d;
         color: white;
     }
+
+    .match-thumbnail {
+        width: 130px;
+        height: 130px;
+        object-fit: cover;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        background: #fff;
+    }
 </style>
 
 <script>
@@ -127,11 +136,11 @@
         let html = '';
 
         // Display uploaded image
-        if (data.imageUrl) {
+        @* if (data.imageUrl) {
             html += `<div class="mb-3 text-center">
                         <img src="${data.imageUrl}" alt="Uploaded Image" class="img-thumbnail" style="max-width:100%;"/>
                      </div>`;
-        }
+        } *@
 
         // No matches found
         if (!data.matches || data.matches.length === 0) {
@@ -165,21 +174,32 @@
                 html += '<h5 class="mt-3">Individual Face Matches:</h5>';
                 data.matches.forEach(match => {
                     const similarity = (match.similarity * 100).toFixed(1);
-                    html += `<div class="match-card">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <span class="similarity-badge ${getSimilarityClass(match.similarity)}">
-                                            ${similarity}% match
-                                        </span>
-                                    </div>
-                                    <div class="text-end">
-                                        <small class="d-block"><strong>File:</strong> ${match.fileName}</small>
-                                        <small class="d-block"><strong>Frame:</strong> ${match.frameNumber}</small>
-                                        <small class="d-block text-muted">Media ID: ${match.mediaFileId}</small>
-                                        <small class="d-block text-muted">Face ID: ${match.faceId}</small>
-                                    </div>
+
+                    html += `
+                    <div class="match-card">
+                        <div class="d-flex align-items-center">
+
+                            <!-- Thumbnail (LEFT) -->
+                            <img src="${match.thumbnailUrl || '/images/no-face.png'}"
+                                 class="match-thumbnail me-3"
+                                 alt="Face thumbnail" />
+
+                            <!-- Details (RIGHT) -->
+                            <div class="flex-grow-1">
+                                <span class="similarity-badge ${getSimilarityClass(match.similarity)}">
+                                    ${similarity}% match
+                                </span>
+
+                                <div class="mt-1">
+                                    <small><strong>File:</strong> ${match.fileName}</small><br/>
+                                    <small><strong>Frame:</strong> ${match.frameNumber}</small><br/>
+                                    <small class="text-muted">Media ID: ${match.mediaFileId}</small><br/>
+                                    <small class="text-muted">Face ID: ${match.faceId}</small>
                                 </div>
-                             </div>`;
+                            </div>
+
+                        </div>
+                    </div>`;
                 });
             }
         }
