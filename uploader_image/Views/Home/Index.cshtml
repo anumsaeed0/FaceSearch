@@ -2,236 +2,382 @@
     ViewBag.Title = "Face Recognition Upload";
 }
 
-<div class="container mt-4">
-    <div class="row">
-        <!-- Upload Section -->
-        <div class="col-md-6">
-            <h2>Upload an Image</h2>
+<div class="container mt-5">
+    <div class="row g-4">
+        <!-- Upload Card -->
+        <div class="col-lg-5">
+            <div class="card upload-card p-4 shadow-sm">
+                <h3 class="card-title mb-3 text-center">Upload an Image</h3>
 
-            <form asp-action="Index" method="post" enctype="multipart/form-data">
-                <div class="mb-3">
-                    <input type="file" name="imageFile" class="form-control" accept="image/*" required />
+                <form id="uploadForm" asp-action="Index" method="post" enctype="multipart/form-data">
+                    <div style="position: relative;">
+                        <div id="uploadArea" class="upload-area text-center">
+                            <i class="upload-icon bi bi-cloud-arrow-up"></i>
+                            <p class="upload-text">Drag & drop or click to upload</p>
+                            <input type="file" name="imageFile" id="imageInput" class="file-input"
+                                   accept="image/*" required
+                                   style="position:absolute; top:0; left:0; width:100%; height:100%; opacity:0; cursor:pointer;" />
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-gradient mt-3 w-100">Upload & Process</button>
+
+                </form>
+
+                <div id="loadingIndicator" class="loading-container mt-3" style="display:none;">
+                    <div class="loading-spinner"></div>
+                    <p class="loading-text">Processing image...</p>
                 </div>
-                <button type="submit" class="btn btn-primary">Upload & Process</button>
-            </form>
 
-            @if (ViewBag.Message != null)
-            {
-                <div class="alert alert-success mt-3">@ViewBag.Message</div>
-            }
+                @if (ViewBag.Message != null)
+                {
+                    <div class="alert alert-success mt-3">@ViewBag.Message</div>
+                }
 
-            @if (ViewBag.ImagePath != null)
-            {
-                <div style="position: relative; display: inline-block; margin-top: 15px;">
-                    <img src="@ViewBag.ImagePath" alt="Uploaded Image" class="img-thumbnail" style="max-width:100%;" />
+                @if (ViewBag.ImagePath != null)
+                {
+                    <div style="position: relative; display: inline-block; margin-top: 15px;" class="mt-3 text-center">
+                        <img src="@ViewBag.ImagePath" class="img-thumbnail uploaded-image" />
 
-                    <!-- Delete Button -->
-                    <form asp-action="DeleteImage" method="post"
-                          style="position:absolute; top:5px; right:5px;">
-                        <input type="hidden" name="fileName" value="@ViewBag.FileName" />
-                        <button type="submit" class="btn btn-danger btn-sm">
-                            ×
-                        </button>
-                    </form>
-                </div>
-            }
+                        <!-- Delete Button -->
+                        <form asp-action="DeleteImage" method="post" style="position:absolute; top:5px; right:5px;">
+                            <input type="hidden" name="fileName" value="@ViewBag.FileName" />
+                            <button type="submit" class="btn btn-danger btn-sm">×</button>
+                        </form>
+                    </div>
+                }
+            </div>
         </div>
 
-        <!-- Results Section -->
-        <div class="col-md-6">
-            <h2>Face Match Results</h2>
-            <button id="refreshResults" class="btn btn-info mb-3">Refresh Results</button>
+        <!-- Results Card -->
+        <div class="col-lg-7">
+            <div class="card results-card p-4 shadow-sm">
+                <h3 class="card-title mb-3 text-center">Face Match Results</h3>
+                <button id="refreshResults" class="btn btn-info mb-3">Refresh Results</button>
 
-            <div id="loadingIndicator" class="alert alert-info" style="display:none;">
-                <span class="spinner-border spinner-border-sm me-2"></span>
-                Processing face detection...
-            </div>
-
-            <div id="resultsContainer">
-                <p class="text-muted">Upload an image to see matching results...</p>
+                <div id="resultsContainer" class="results-container text-center">
+                    <p class="text-muted">Upload an image to see matching results...</p>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <style>
-    .match-card {
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        padding: 10px;
-        margin-bottom: 10px;
-        background: #f9f9f9;
+    .container {
+        width: 90%;
+        padding-left: 2rem;
+        padding-right: 2rem;
+        max-width: 90%;
     }
 
+    /* General Card Styles */
+    .card {
+        border-radius: 12px;
+        transition: all 0.3s ease;
+    }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+    /* Upload Area */
+    .upload-area {
+        border: 3px dashed #d1d5db;
+        border-radius: 12px;
+        padding: 3rem 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: #f9fafb;
+    }
+
+        .upload-area:hover {
+            border-color: #6366f1;
+            background: #eef2ff;
+        }
+
+        .upload-area.dragover {
+            border-color: #8b5cf6;
+            background: #ede9fe;
+        }
+
+    .upload-icon {
+        font-size: 3rem;
+        color: #6366f1;
+        margin-bottom: 0.5rem;
+    }
+
+    .upload-text {
+        font-size: 1.1rem;
+        color: #4b5563;
+    }
+
+    .file-input {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    /* Gradient Buttons */
+    .btn-gradient {
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: #fff;
+        border: none;
+        font-weight: 600;
+        padding: 0.75rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(99,102,241,0.3);
+        }
+
+    /* Loading Spinner */
+    .loading-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .loading-spinner {
+        width: 50px;
+        height: 50px;
+        border: 5px solid #e5e7eb;
+        border-top-color: #6366f1;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 0.5rem;
+    }
+    @@keyframes spin {
+        to
+
+    {
+        transform: rotate(360deg);
+    }
+
+    }
+
+    /* Match Cards */
+    .match-card {
+        display: flex;
+        align-items: center;
+        border-radius: 10px;
+        padding: 10px;
+        margin-bottom: 10px;
+        background: #f3f4f6; /* initial gray background */
+        position: relative;
+        overflow: hidden;
+        gap: 10px;
+    }
+
+        .match-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform: scaleX(0);
+            transform-origin: right;
+            border-radius: 10px;
+            transition: transform 0.6s cubic-bezier(0.25,1,0.5,1);
+            z-index: 0;
+            background-color: transparent;
+        }
+
+        .match-card * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .match-card.hover-spill::before {
+            transform: scaleX(1);
+            background-color: var(--spill-color);
+        }
+
+        .match-card.retract-spill::before {
+            transform: scaleX(0);
+        }
+
+    /* Left thumbnail */
+    .match-thumbnail {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 8px;
+        flex-shrink: 0;
+    }
+
+    /* Right similarity badge */
     .similarity-badge {
-        font-weight: bold;
-        padding: 5px 10px;
-        border-radius: 3px;
+        font-weight: 600;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100px;
+        height: 100px;
+        border-radius: 8px;
+        flex-shrink: 0;
+        transition: all 0.3s ease;
     }
 
     .high-match {
         background: #28a745;
-        color: white;
+        color: #fff;
     }
 
     .medium-match {
         background: #ffc107;
-        color: black;
+        color: #000;
     }
 
     .low-match {
         background: #6c757d;
-        color: white;
+        color: #fff;
     }
 
-    .match-thumbnail {
-        width: 130px;
-        height: 130px;
-        object-fit: cover;
-        border-radius: 4px;
-        border: 1px solid #ccc;
-        background: #fff;
+    .match-info {
+        flex: 1 1 auto;
+        max-width: calc(100% - 220px);
+        padding-left: 0px;
+        margin-bottom: 5px;
+        text-align: left;
+    }
+
+        .match-info p {
+            margin: 0;
+            line-height: 1.2;
+            word-break: break-word;
+        }
+
+    /* Responsive */
+    @@media (max-width:768px) {
+        .upload-area
+
+    {
+        padding: 2rem 1rem;
+    }
+
+    .match-card {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .match-thumbnail, .similarity-badge {
+        width: 100%;
+        height: auto;
+        margin-bottom: 10px;
+    }
+
+    
+
     }
 </style>
 
 <script>
     let autoRefreshInterval;
 
+    // Drag & drop
+    const uploadArea = document.getElementById('uploadArea');
+    uploadArea.addEventListener('dragover', e=>{ e.preventDefault(); uploadArea.classList.add('dragover'); });
+    uploadArea.addEventListener('dragleave', e=>{ uploadArea.classList.remove('dragover'); });
+    uploadArea.addEventListener('drop', e=>{ e.preventDefault(); uploadArea.classList.remove('dragover'); document.getElementById('imageInput').files = e.dataTransfer.files; });
+
+    // Auto-refresh
     function startAutoRefresh() {
         let attempts = 0;
-        autoRefreshInterval = setInterval(() => {
+        autoRefreshInterval = setInterval(()=>{
             attempts++;
             fetchResults();
-            if (attempts >= 15) { // stop after 30 seconds
-                stopAutoRefresh();
-            }
-        }, 2000);
+            if(attempts>=15) stopAutoRefresh();
+        },2000);
     }
+    function stopAutoRefresh(){ if(autoRefreshInterval){ clearInterval(autoRefreshInterval); autoRefreshInterval=null; } }
 
-    function stopAutoRefresh() {
-        if (autoRefreshInterval) {
-            clearInterval(autoRefreshInterval);
-            autoRefreshInterval = null;
-        }
-    }
-
-    async function fetchResults() {
-        try {
-            const response = await fetch('/api/face-match-results');
-            const data = await response.json();
-
-            if (data.success) {
-                displayResults(data);
-                document.getElementById('loadingIndicator').style.display = 'none';
-                stopAutoRefresh(); // stop polling once results are available
-            }
-        } catch (error) {
-            console.error('Error fetching results:', error);
-            document.getElementById('loadingIndicator').style.display = 'none';
-        }
-    }
-
-    function displayResults(data) {
+    // Display results
+    function displayResults(data){
         const container = document.getElementById('resultsContainer');
         let html = '';
 
-        // Display uploaded image
-        @* if (data.imageUrl) {
-            html += `<div class="mb-3 text-center">
-                        <img src="${data.imageUrl}" alt="Uploaded Image" class="img-thumbnail" style="max-width:100%;"/>
-                     </div>`;
-        } *@
-
-        // No matches found
-        if (!data.matches || data.matches.length === 0) {
-            html += `<div class="alert alert-warning">
-                        <strong>No matches found</strong>
-                        <p class="mb-0">${data.message || 'No matching faces detected in the database.'}</p>
-                     </div>`;
+        if(!data.matches || data.matches.length===0){
+            html = `<p class="text-muted">No matches found</p>`;
         } else {
-            // Summary
-            html += `<div class="alert alert-success">
-                        <strong>Found ${data.matchCount} matching face(s)</strong> in ${data.clusterCount} person cluster(s)
-                     </div>`;
+            data.matches.forEach(match=>{
+                const similarity = (match.similarity*100).toFixed(1);
+                const simClass = getSimilarityClass(match.similarity);
+                const color = getSimilarityColor(simClass);
 
-            // Clusters
-            if (data.clusters && data.clusters.length > 0) {
-                html += '<h5>Top Matching Clusters:</h5>';
-                data.clusters.forEach(cluster => {
-                    const similarity = (cluster.similarity * 100).toFixed(1);
-                    html += `<div class="match-card">
-                                <span class="similarity-badge ${getSimilarityClass(cluster.similarity)}">
-                                    ${similarity}% match
-                                </span>
-                                <span class="ms-2">Person ID: ${cluster.personId}</span>
-                                <span class="ms-2 text-muted">(${cluster.faceCount} faces)</span>
-                             </div>`;
-                });
-            }
-
-            // Individual face matches
-            if (data.matches && data.matches.length > 0) {
-                html += '<h5 class="mt-3">Individual Face Matches:</h5>';
-                data.matches.forEach(match => {
-                    const similarity = (match.similarity * 100).toFixed(1);
-
-                    html += `
-                    <div class="match-card">
-                        <div class="d-flex align-items-center">
-
-                            <!-- Thumbnail (LEFT) -->
-                            <img src="${match.thumbnailUrl || '/images/no-face.png'}"
-                                 class="match-thumbnail me-3"
-                                 alt="Face thumbnail" />
-
-                            <!-- Details (RIGHT) -->
-                            <div class="flex-grow-1">
-                                <span class="similarity-badge ${getSimilarityClass(match.similarity)}">
-                                    ${similarity}% match
-                                </span>
-
-                                <div class="mt-1">
-                                    <small><strong>File:</strong> ${match.fileName}</small><br/>
-                                    <small><strong>Frame:</strong> ${match.frameNumber}</small><br/>
-                                    <small class="text-muted">Media ID: ${match.mediaFileId}</small><br/>
-                                    <small class="text-muted">Face ID: ${match.faceId}</small>
-                                </div>
+                html += `<div class="match-card" style="--spill-color:${color}">
+                            <img src="${match.thumbnailUrl||'/images/no-face.png'}" class="match-thumbnail" />
+                            <div class="match-info">
+                                <p><strong>File:</strong> ${match.fileName}</p>
+                                <p><strong>Frame:</strong> ${match.frameNumber}</p>
+                                <p><strong>Media ID:</strong> ${match.mediaFileId}</p>
+                                <p><strong>Face ID:</strong> ${match.faceId}</p>
                             </div>
-
-                        </div>
-                    </div>`;
-                });
-            }
+                            <div class="similarity-badge ${simClass}">${similarity}%</div>
+                         </div>`;
+            });
         }
 
         container.innerHTML = html;
+        addSpillEffect();
     }
 
-    function getSimilarityClass(similarity) {
-        if (similarity >= 0.75) return 'high-match';
-        if (similarity >= 0.60) return 'medium-match';
-        return 'low-match';
+    // Badge class helpers
+    function getSimilarityClass(sim){ if(sim>=0.75) return 'high-match'; if(sim>=0.60) return 'medium-match'; return 'low-match'; }
+    function getSimilarityColor(simClass){ return simClass==='high-match'? '#28a745' : simClass==='medium-match'? '#ffc107' : '#6c757d'; }
+
+    // Spill animation
+    function addSpillEffect(){
+        document.querySelectorAll('.match-card').forEach(card=>{
+            card.addEventListener('mouseenter',()=>{ card.classList.remove('retract-spill'); card.classList.add('hover-spill'); });
+            card.addEventListener('mouseleave',()=>{ card.classList.remove('hover-spill'); card.classList.add('retract-spill'); });
+        });
+    }
+
+    // Fetch results
+    async function fetchResults(){
+        try{
+            const response = await fetch('/api/face-match-results');
+            const data = await response.json();
+            if(data.success){ displayResults(data); document.getElementById('loadingIndicator').style.display='none'; stopAutoRefresh(); }
+        } catch(e){ console.error(e); document.getElementById('loadingIndicator').style.display='none'; }
     }
 
     // Event listeners
     document.getElementById('refreshResults').addEventListener('click', fetchResults);
-
-    // Start auto-refresh if there is an uploaded image
     @if (ViewBag.ImagePath != null)
     {
             <text>
-                document.addEventListener('DOMContentLoaded', () => {
-                    document.getElementById('loadingIndicator').style.display = 'block';
-                    startAutoRefresh();
-                });
+            document.addEventListener('DOMContentLoaded',()=>{
+                document.getElementById('loadingIndicator').style.display='flex';
+                startAutoRefresh();
+            });
             </text>
     }
 
-    // Show loading indicator on form submit
-    document.querySelector('form').addEventListener('submit', () => {
-        setTimeout(() => {
-            document.getElementById('loadingIndicator').style.display = 'block';
-            startAutoRefresh();
-        }, 500);
+    // Show loading on submit
+    document.getElementById('uploadForm').addEventListener('submit', (e) => {
+        // Show the loading spinner immediately
+        document.getElementById('loadingIndicator').style.display = 'flex';
+
+        // Start auto-refresh if needed (optional)
+        startAutoRefresh();
+
+        // Let the form submit normally
     });
+    @* document.getElementById('uploadForm').addEventListener('submit',()=>{
+        setTimeout(()=>{
+            document.getElementById('loadingIndicator').style.display='flex';
+            startAutoRefresh();
+        },500);
+    }); *@
 </script>
